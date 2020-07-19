@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb705331db2b24c4a9f243de40e56aa5, type: 3}
+  m_Name: Basic
+  m_EditorClassIdentifier: 
+  snakeSkin: {fileID: 11400000, guid: 0690463a84172da4ab8f9acbb90b18db, type: 2}
+  foodSkin: {fileID: 11400000, guid: c6277536ed3e44347ab08a774c33d1c7, type: 2}
+  groundSkin: {fileID: 11400000, guid: 304e71b3fa1b0474aad81f0f8fa9c485, type: 2}
+  wallSkin: {fileID: 11400000, guid: 37b639c331ab78f458b892ae8f5b1cdf, type: 2}

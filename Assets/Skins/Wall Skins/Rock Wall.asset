@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 857570723411a8d4ca008e5830396891, type: 3}
+  m_Name: Rock Wall
+  m_EditorClassIdentifier: 
+  straightWallSprite: {fileID: -9180091762539557153, guid: 1fa3c1efc0aef0c42aed0bcc310831ba,
+    type: 3}
+  curveWallSprite: {fileID: -9180091762539557153, guid: 1fa3c1efc0aef0c42aed0bcc310831ba,
+    type: 3}
