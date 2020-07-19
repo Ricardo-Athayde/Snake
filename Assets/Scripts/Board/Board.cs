@@ -9,9 +9,10 @@ namespace Snake
     public class Board : MonoBehaviour
     {
         public enum E_HitObject { None, SnakeBody, SnakeHead, Wall, Food }
-
+        [Header("Settings")]
         public Vector2Int boardSize;
         
+        [Header("References")]
         [SerializeField] Snake snake = default;
         [SerializeField] Food food = default;
 

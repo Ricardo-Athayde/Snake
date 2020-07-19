@@ -19,7 +19,7 @@ namespace Snake
             }
 
             //Impede que tentemos acessar uma skin nao criada corretamente
-            if(SkinController.instance.selectedSkin.foodSkin.foodSprites.Length == 0) { Debug.LogWarning("No ground sprite on selected skin."); return; }
+            if(SkinController.instance.selectedSkin.foodSkin.foodSprites.Length == 0) { Debug.LogWarning("No food sprite on selected skin."); return; }
 
             //Colocamos o sprite na posicao correta e atualizamos o sprite
             food.sprite = SkinController.instance.selectedSkin.foodSkin.foodSprites[Random.Range(0, SkinController.instance.selectedSkin.foodSkin.foodSprites.Length)];

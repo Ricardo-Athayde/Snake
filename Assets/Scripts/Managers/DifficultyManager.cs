@@ -4,12 +4,24 @@ using UnityEngine;
 
 namespace Snake
 {
+    //Classe responsavel pelo controle da dificuldade do jogo
     public class DifficultyManager : MonoBehaviour
-    {        enum E_DifficultyType { Progressive, Curve };
+    {                
+        enum E_DifficultyType { Progressive, Curve };
+
+        [Header("Type")]
+        [Tooltip("How shoud the difficulty be calculated")]
         [SerializeField] E_DifficultyType difficultyType = default;
 
+        [Header("Progressive")]
+        [Tooltip("Initial value for the progressive difficulty")]
         [SerializeField] float progressiveStart = default;
+
+        [Tooltip("Incremental value for the progressive difficulty")]
         [SerializeField] float progressiveIncrease = default;
+
+        [Header("Curve")]
+        [Tooltip("Difficulty curve")]
         [SerializeField] AnimationCurve curveIncrease = default;
         
         public float GetDifficultyValue(float value)

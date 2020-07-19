@@ -8,7 +8,7 @@ namespace Snake
     //Classe que controla o fluxo do jogo
     public class GameManager : MonoBehaviour
     {
-        public enum E_GameState { Paused, Playing, Death, Win, GameStart }
+        public enum E_GameState { Playing, Death, Win, GameStart }
         E_GameState gState;
         E_GameState gameState
         {
@@ -28,7 +28,7 @@ namespace Snake
         [SerializeField] Board board = default;
         [SerializeField] Food food = default;
         [SerializeField] DifficultyManager difficulty = default;
-
+        [SerializeField] ScreenMsg screenMesseges = default;
         int eatenFoodNumber;
 
         // Start is called before the first frame update
@@ -44,18 +44,19 @@ namespace Snake
             {
                 case E_GameState.Playing:
                     snake.StartMoving();
-                    break;
-                case E_GameState.Paused:
-                    snake.StopMoving();
+                    screenMesseges.RemoveMsg();
                     break;
                 case E_GameState.GameStart:
                     ResetGame();
+                    screenMesseges.DisplayMsg("Press a movement key to start the game.\n(use the arrow keys to move)");
                     break;
                 case E_GameState.Death:
-                    gameState = E_GameState.GameStart;
+                    snake.StopMoving();
+                    screenMesseges.DisplayMsg("You Died!\n\nPress a movement key to try again.", Color.red);
                     break;
                 case E_GameState.Win:
-                    gameState = E_GameState.GameStart;
+                    snake.StopMoving();
+                    screenMesseges.DisplayMsg("You Won!\n\nPress a movement key to try again.", Color.green);
                     break;
             }
         }
@@ -120,20 +121,34 @@ namespace Snake
                     case E_GameState.GameStart:
                         gameState = E_GameState.Playing;
                         break;
+                    case E_GameState.Win:
+                        gameState = E_GameState.GameStart;
+                        break;
+                    case E_GameState.Death:
+                        gameState = E_GameState.GameStart;
+                        break;
                 }
             }
+        }
+
+        void SpecialKeyPressed(Hashtable eventParam)
+        {
+            eatenFoodNumber++;
+            snake.speed = difficulty.GetDifficultyValue(eatenFoodNumber);
         }
 
         private void OnEnable()
         {
             EventManager.AddListener("SnakeMoved", SnakeMoved);
             EventManager.AddListener("MovementKeyPressed", MovementKeyPressed);
+            EventManager.AddListener("SpecialKeyPressed", SpecialKeyPressed);
         }
 
         private void OnDisable()
         {
             EventManager.RemoveListner("SnakeMoved", SnakeMoved);
             EventManager.RemoveListner("MovementKeyPressed", MovementKeyPressed);
+            EventManager.AddListener("SpecialKeyPressed", SpecialKeyPressed);
 
         }
 
@@ -141,6 +156,7 @@ namespace Snake
         {
             EventManager.RemoveListner("SnakeMoved", SnakeMoved);
             EventManager.RemoveListner("MovementKeyPressed", MovementKeyPressed);
+            EventManager.AddListener("SpecialKeyPressed", SpecialKeyPressed);
         }
     }
 }

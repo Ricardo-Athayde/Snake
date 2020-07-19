@@ -12,6 +12,8 @@ namespace Snake
     {
         #region Variables
         public float speed; //Velocidade da cobra
+        [Tooltip("Should we move when a movment key is prssed? This gives the ability to move faster than expected, but also makes the game more responsive and fliud.")]
+        [SerializeField] bool moveOnKeyPress = default;
 
         [HideInInspector] public List<Vector2Int> snakeBody { get; private set; }
 
@@ -136,19 +138,36 @@ namespace Snake
                 switch (eventParam["Code"])
                 {
                     case "Left":
-                        if (lastDirection != GlobalEnums.E_Direction.Right) { desiredDirection = GlobalEnums.E_Direction.Left; }
+                        if (lastDirection != GlobalEnums.E_Direction.Right) 
+                        { 
+                            desiredDirection = GlobalEnums.E_Direction.Left; 
+                            if(moveOnKeyPress && canMove) { Move(); moveTimer = 0; }
+                        }
                         break;
 
                     case "Right":
-                        if (lastDirection != GlobalEnums.E_Direction.Left) { desiredDirection = GlobalEnums.E_Direction.Right; }
+                        if (lastDirection != GlobalEnums.E_Direction.Left) 
+                        {
+                            desiredDirection = GlobalEnums.E_Direction.Right;
+                            if (moveOnKeyPress && canMove) { Move(); moveTimer = 0; }
+                        }
                         break;
 
                     case "Up":
-                        if (lastDirection != GlobalEnums.E_Direction.Down) { desiredDirection = GlobalEnums.E_Direction.Up; }
+                        if (lastDirection != GlobalEnums.E_Direction.Down) 
+                        { 
+                            desiredDirection = GlobalEnums.E_Direction.Up;
+                            if (moveOnKeyPress && canMove) { Move(); moveTimer = 0; }
+                        }
+
                         break;
 
                     case "Down":
-                        if (lastDirection != GlobalEnums.E_Direction.Up) { desiredDirection = GlobalEnums.E_Direction.Down; }
+                        if (lastDirection != GlobalEnums.E_Direction.Up) 
+                        { 
+                            desiredDirection = GlobalEnums.E_Direction.Down;
+                            if (moveOnKeyPress && canMove) { Move(); moveTimer = 0; }
+                        }
                         break;
                 }
             }
