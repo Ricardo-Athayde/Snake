@@ -63,12 +63,14 @@ namespace Snake
 
         //Reinicia o jogo
         void ResetGame()
-        {
+        {            
             eatenFoodNumber = 0;
             EventManager.BroadcastEvent("BoardSize", new Hashtable { { "Size", board.boardSize } });
             groundDisplay.CreateMap(true);
             snake.ResetSnake(board.boardSize / 2);
             snake.speed = difficulty.GetDifficultyValue(eatenFoodNumber);
+            board.ResetSnakeBodyMatrix();
+            board.UpdateSnakeBodyMatrix();
             food.PlaceFood(board.GetEmptyPosition());            
         }
 
@@ -86,12 +88,13 @@ namespace Snake
             }
         }
 
-        //Verifica se a aobra bateu em algum lugar ou comeu uma fruta
+        //Verifica se a cobra bateu em algum lugar ou comeu uma fruta
         void SnakeMoved(Hashtable eventParam)
         {
             if (eventParam == null) { return; }
             if (eventParam.ContainsKey("Pos"))
             {
+                board.UpdateSnakeBodyMatrix();
                 switch (board.CheckIfHitObject((Vector2Int)eventParam["Pos"]))
                 {
                     case Board.E_HitObject.Food:

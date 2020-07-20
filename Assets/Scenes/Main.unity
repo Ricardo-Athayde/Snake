@@ -378,6 +378,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardSize: {x: 65, y: 35}
+  useMultithreading: 0
+  jobBatches: 0
   snake: {fileID: 2069018777}
   food: {fileID: 973921729}
 --- !u!1 &973921727
@@ -622,7 +624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   difficultyType: 0
-  progressiveStart: 3
+  progressiveStart: 1
   progressiveIncrease: 0.1
   curveIncrease:
     serializedVersion: 2

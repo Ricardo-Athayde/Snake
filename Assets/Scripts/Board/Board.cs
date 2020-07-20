@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Util.EventManager;
+using Unity.Jobs;
+using Unity.Collections;
 
 namespace Snake
 {
@@ -11,10 +13,14 @@ namespace Snake
         public enum E_HitObject { None, SnakeBody, SnakeHead, Wall, Food }
         [Header("Settings")]
         public Vector2Int boardSize;
-        
+
         [Header("References")]
         [SerializeField] Snake snake = default;
         [SerializeField] Food food = default;
+
+        bool[,] snakeBodyMatrix;
+        Vector2Int lastTailPosition;
+
 
         //Verifica se a posicao passada corresponde a algum elemento interativo do jogo
         public E_HitObject CheckIfHitObject(Vector2Int pos)
@@ -29,15 +35,13 @@ namespace Snake
             if (pos.y == 0 || pos.y == boardSize.y - 1 || pos.x == 0 || pos.x == boardSize.x - 1)
             {
                 return E_HitObject.Wall;
-            }    
+            }
 
             //Corpo da Cobra
-            for (int i = 1; i < snake.snakeBody.Count; i++)
+            //Verifica se a posicao pos na matriz de corpo da cobra e verdadeira
+            if (snakeBodyMatrix[pos.x, pos.y] == true)
             {
-                if (pos == snake.snakeBody[i])
-                {
-                    return E_HitObject.SnakeBody;
-                }
+                return E_HitObject.SnakeBody;
             }
 
             //Cabeca da cobra
@@ -70,6 +74,32 @@ namespace Snake
                 }
             }
             return Vector2Int.zero;
+        }
+
+        //Atualiza a matriz que contem o corpo da cobra
+        public void UpdateSnakeBodyMatrix()
+        {
+            if (snakeBodyMatrix == null)
+            {
+                ResetSnakeBodyMatrix();
+            }
+            if (lastTailPosition != snake.snakeBody[snake.snakeBody.Count - 1])
+            {
+                snakeBodyMatrix[lastTailPosition.x, lastTailPosition.y] = false;
+                lastTailPosition = snake.snakeBody[snake.snakeBody.Count - 1];
+            }
+            snakeBodyMatrix[snake.snakeBody[1].x, snake.snakeBody[1].y] = true;
+        }
+
+        //Reseta a matriz que contem os elemetos do corpo da cobra
+        public void ResetSnakeBodyMatrix()
+        {
+            snakeBodyMatrix = new bool[boardSize.x, boardSize.y];
+            for (int i = 1; i < snake.snakeBody.Count; i++)
+            {
+                snakeBodyMatrix[snake.snakeBody[i].x, snake.snakeBody[i].y] = true;
+            }
+            lastTailPosition = snake.snakeBody[snake.snakeBody.Count - 1];
         }
     }
 }
