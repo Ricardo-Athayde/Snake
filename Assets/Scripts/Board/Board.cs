@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Util.EventManager;
-using Unity.Jobs;
-using Unity.Collections;
 
 namespace Snake
 {
@@ -83,11 +81,13 @@ namespace Snake
             {
                 ResetSnakeBodyMatrix();
             }
+            //Caso a calda tenha andado, pegamos a posicao que ela estava e marcamos como vazia
             if (lastTailPosition != snake.snakeBody[snake.snakeBody.Count - 1])
             {
                 snakeBodyMatrix[lastTailPosition.x, lastTailPosition.y] = false;
                 lastTailPosition = snake.snakeBody[snake.snakeBody.Count - 1];
             }
+            //Atualiza a posicao do primeiro corpo depois da cabeca
             snakeBodyMatrix[snake.snakeBody[1].x, snake.snakeBody[1].y] = true;
         }
 
