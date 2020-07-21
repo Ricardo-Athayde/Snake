@@ -2,63 +2,66 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Sistema simples de object pooling que pode ser utilizado em diversas situações
-public class Pool : MonoBehaviour
+namespace Util.PoolSystem
 {
-    [Tooltip("Object that will be Instantiated")]
-    [SerializeField] GameObject poolObj = default;
-
-    [Tooltip("How many objects will be instantiated at start")]
-    [SerializeField] int inicialPoolSize;
-
-    [Tooltip("How many objects will be instantiated when the pool is empty")]
-    [SerializeField] int poolIncrement;
-
-    List<GameObject> pool;
-
-    public Pool(int poolStartSize, int increment)
+    //Sistema simples de object pooling que pode ser utilizado em diversas situações
+    public class Pool : MonoBehaviour
     {
-        inicialPoolSize = poolStartSize;
-        poolIncrement = increment;
-    }
+        [Tooltip("Object that will be Instantiated")]
+        [SerializeField] GameObject poolObj = default;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        AddPoolObjects(inicialPoolSize);
-    }
+        [Tooltip("How many objects will be instantiated at start")]
+        [SerializeField] int inicialPoolSize;
 
-    //Recebe um objeto e adicona na piscina
-    public void ReturnObjToPool(GameObject obj)
-    {
-        obj.SetActive(false);
-        obj.transform.SetParent(transform);
-        pool.Add(obj);
-    }
+        [Tooltip("How many objects will be instantiated when the pool is empty")]
+        [SerializeField] int poolIncrement;
 
-    //Pega um objeto da piscina
-    public GameObject GetObjFromPool()
-    {
-        if(pool == null) { AddPoolObjects(inicialPoolSize); }
-        if (pool.Count <= 0)
+        List<GameObject> pool;
+
+        public Pool(int poolStartSize, int increment)
         {
-            AddPoolObjects(poolIncrement);
+            inicialPoolSize = poolStartSize;
+            poolIncrement = increment;
         }
-        GameObject obj = pool[pool.Count - 1];
-        pool.RemoveAt(pool.Count - 1);
-        return obj;
-    }
 
-    //Adiciona elementos a pisicna de objetos
-    void AddPoolObjects(int number)
-    {
-        if(pool == null) { pool = new List<GameObject>(); }
-        for (int i = 0; i < number; i++)
+        // Start is called before the first frame update
+        void Start()
         {
-            GameObject obj = Instantiate(poolObj, transform);
+            AddPoolObjects(inicialPoolSize);
+        }
+
+        //Recebe um objeto e adicona na piscina
+        public void ReturnObjToPool(GameObject obj)
+        {
             obj.SetActive(false);
+            obj.transform.SetParent(transform);
             pool.Add(obj);
         }
-    }
 
+        //Pega um objeto da piscina
+        public GameObject GetObjFromPool()
+        {
+            if (pool == null) { AddPoolObjects(inicialPoolSize); }
+            if (pool.Count <= 0)
+            {
+                AddPoolObjects(poolIncrement);
+            }
+            GameObject obj = pool[pool.Count - 1];
+            pool.RemoveAt(pool.Count - 1);
+            return obj;
+        }
+
+        //Adiciona elementos a pisicna de objetos
+        void AddPoolObjects(int number)
+        {
+            if (pool == null) { pool = new List<GameObject>(); }
+            for (int i = 0; i < number; i++)
+            {
+                GameObject obj = Instantiate(poolObj, transform);
+                obj.SetActive(false);
+                pool.Add(obj);
+            }
+        }
+
+    }
 }

@@ -28,8 +28,8 @@ namespace Snake
         [SerializeField] Board board = default;
         [SerializeField] Food food = default;
         [SerializeField] DifficultyManager difficulty = default;
-        [SerializeField] ScreenMsg screenMesseges = default;
-        int eatenFoodNumber;
+        [SerializeField] UIManager ui = default;
+        [SerializeField] ScoreManager score = default;
 
         // Start is called before the first frame update
         void Start()
@@ -44,31 +44,36 @@ namespace Snake
             {
                 case E_GameState.Playing:
                     snake.StartMoving();
-                    screenMesseges.RemoveMsg();
+                    ui.RemoveMsg();
+                    ui.UpdateScores(score.CurrentScore, score.Highscore);
                     break;
                 case E_GameState.GameStart:
                     ResetGame();
-                    screenMesseges.DisplayMsg("Press a movement key to start the game.\n(use the arrow keys to move)");
+                    ui.DisplayMsg("Press a movement key to start the game.\n(use the arrow keys to move)");
+                    ui.UpdateScores(score.CurrentScore, score.Highscore);
                     break;
                 case E_GameState.Death:
                     snake.StopMoving();
-                    screenMesseges.DisplayMsg("You Died!\n\nPress a movement key to try again.", Color.red);
+                    ui.DisplayMsg("You Died!\n\nPress a movement key to try again.", Color.red);
+                    ui.UpdateScores(score.CurrentScore, score.Highscore);
                     break;
                 case E_GameState.Win:
                     snake.StopMoving();
-                    screenMesseges.DisplayMsg("You Won!\n\nPress a movement key to try again.", Color.green);
+                    ui.DisplayMsg("You Won!\n\nPress a movement key to try again.", Color.green);
+                    ui.UpdateScores(score.CurrentScore, score.Highscore);
                     break;
             }
         }
 
         //Reinicia o jogo
         void ResetGame()
-        {            
-            eatenFoodNumber = 0;
+        {
+            score.CurrentScore = 0;
+            ui.UpdateScores(score.CurrentScore, score.Highscore);
             EventManager.BroadcastEvent("BoardSize", new Hashtable { { "Size", board.boardSize } });
             groundDisplay.CreateMap(true);
             snake.ResetSnake(board.boardSize / 2);
-            snake.speed = difficulty.GetDifficultyValue(eatenFoodNumber);
+            snake.speed = difficulty.GetDifficultyValue(score.CurrentScore);
             board.ResetSnakeBodyMatrix();
             board.UpdateSnakeBodyMatrix();
             food.PlaceFood(board.GetEmptyPosition());            
@@ -99,8 +104,9 @@ namespace Snake
                 {
                     case Board.E_HitObject.Food:
                         EventManager.BroadcastEvent("SnakeGrow", null);
-                        eatenFoodNumber++;
-                        snake.speed = difficulty.GetDifficultyValue(eatenFoodNumber);
+                        score.CurrentScore++;
+                        ui.UpdateScores(score.CurrentScore, score.Highscore);
+                        snake.speed = difficulty.GetDifficultyValue(score.CurrentScore);
                         FooodEaten();
                         break;
                     case Board.E_HitObject.SnakeBody:
@@ -136,8 +142,9 @@ namespace Snake
 
         void SpecialKeyPressed(Hashtable eventParam)
         {
-            eatenFoodNumber++;
-            snake.speed = difficulty.GetDifficultyValue(eatenFoodNumber);
+            score.CurrentScore++;
+            ui.UpdateScores(score.CurrentScore, score.Highscore);
+            snake.speed = difficulty.GetDifficultyValue(score.CurrentScore);
         }
 
         private void OnEnable()
